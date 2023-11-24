@@ -3,7 +3,7 @@ import styled from "styled-components";
 const Menu = styled.ul`
   padding-top: 30%;
   height: 100%;
-  background-color: #49ddfa;
+  background-color: #333;
 
   li {
     text-align: center;

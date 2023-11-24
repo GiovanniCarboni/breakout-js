@@ -1,11 +1,32 @@
+import { Howl } from "howler";
+
 export class GameState {
+  readonly bounceSound = new Howl({
+    src: require("../assets/sounds/bounce.wav"),
+    volume: 3,
+  });
+  readonly brickbreakSound = new Howl({
+    src: require("../assets/sounds/brickbreak.wav"),
+    volume: 3,
+  });
+  readonly background1 = new Howl({
+    src: require("../assets/sounds/background1.mp3"),
+    loop: true,
+    volume: 0.6,
+  });
+  readonly background2 = new Howl({
+    src: require("../assets/sounds/background2.mp3"),
+    loop: true,
+    volume: 0.6,
+  });
+
   readonly canvasH: number = 580;
   readonly canvasW: number = 920;
 
   round: number = 1;
 
   score: number = 0;
-  lives: number = 1;
+  lives: number = 3;
 
   gameOver: boolean = false;
   won: boolean = false;
@@ -13,10 +34,10 @@ export class GameState {
   x: number = this.canvasW / 2;
   y: number = this.canvasH - 30;
 
-  dx: number = -3;
-  dy: number = -3;
+  dx: number = 5;
+  dy: number = -4;
 
-  ballRadius: number = 10;
+  ballRadius: number = 8;
 
   paddleH: number = 10;
   paddleW: number = 75;
@@ -26,7 +47,7 @@ export class GameState {
   rightPressed: boolean = false;
   leftPressed: boolean = false;
 
-  brickRowCount: number = 3;
+  brickRowCount: number = 1;
   brickColumnCount: number = 12;
   brickWidth: number = 62;
   brickHeight: number = 20;
@@ -46,20 +67,32 @@ export class GameState {
     }
   }
 
-  resetGame(rows = 3, roundReset = true) {
+  playBackgroundSound() {
+    console.log("play backgroud sound");
+    // console.log(this.round, this.background1.playing);
+    if (this.round === 1 && !this.background1.playing()) {
+      console.log("background-one");
+      this.background1.play();
+    }
+    if (this.round === 2 && !this.background2.playing()) {
+      this.background2.play();
+    }
+  }
+
+  resetGame(rows = 1, roundReset = true) {
     if (roundReset) this.round = 1;
     this.score = 0;
-    this.lives = 1;
+    this.lives = 3;
     this.gameOver = false;
     this.won = false;
 
     this.x = this.canvasW / 2;
     this.y = this.canvasH - 30;
 
-    this.dx = -3;
-    this.dy = -3;
+    this.dx = 5;
+    this.dy = -4;
 
-    this.ballRadius = 10;
+    this.ballRadius = 8;
 
     this.paddleH = 10;
     this.paddleW = 75;
@@ -81,7 +114,12 @@ export class GameState {
     this.round += 1;
     switch (this.round) {
       case 2:
+        Howler.stop();
+        this.background2.play();
         this.resetGame(6, false);
+        break;
+      case 3:
+        this.resetGame(8, false);
         break;
       default:
         this.won = true;
@@ -100,6 +138,7 @@ export class GameState {
           this.y > b.y &&
           this.y < b.y + this.brickHeight
         ) {
+          this.brickbreakSound.play();
           this.dy = -this.dy;
           b.status = false;
           this.score++;
@@ -121,6 +160,7 @@ export class GameState {
       // if it fell on the paddle
       if (this.x > this.paddleX && this.x < this.paddleX + this.paddleW) {
         this.dy = -this.dy;
+        this.bounceSound.play();
         // if it fell out of the paddle
       } else {
         this.lives--;
@@ -132,8 +172,8 @@ export class GameState {
         } else {
           this.x = this.canvasW / 2;
           this.y = this.canvasH - 30;
-          this.dx = 2;
-          this.dy = -2;
+          this.dx = 5;
+          this.dy = -4;
           this.paddleX = (this.canvasW - this.paddleW) / 2;
         }
       }

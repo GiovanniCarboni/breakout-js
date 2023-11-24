@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { home, replay } from "../../assets/icons";
 
 const GameOverContainer = styled.div`
-  background-color: #4bb3a2d1;
+  background-color: #a1a4a3d1;
   height: 100%;
   display: flex;
   flex-direction: column;

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { home, play, replay } from "../../assets/icons";
 
 const PauseScreenContainer = styled.div`
-  background-color: #4bb3a2d1;
+  background-color: #a1a4a3d1;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -45,7 +45,6 @@ interface PauseScreenProps {
 const PauseScreen: React.FC<PauseScreenProps> = ({ ...action }) => {
   return (
     <PauseScreenContainer>
-      <h2>Paused</h2>
       <div className="btns-container">
         <button onClick={action.runGame}>
           <img src={play} alt="play icon" />
